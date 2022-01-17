@@ -14,7 +14,7 @@ const CurrentWeather = ({currentData, hourlyData, units}) => {
             {new Intl.DateTimeFormat('default', {hour: "numeric"}).format(thisTime) }
           </div>
           <div>
-            <img src={`http://openweathermap.org/img/wn/${value.weather[0].icon}@2x.png`} /> <br />
+            <img src={`https://openweathermap.org/img/wn/${value.weather[0].icon}@2x.png`} /> <br />
             {value.weather[0].main} <br />
             {Math.round(value.temp * 10) / 10} {units === "metric" ? "°C" : "°F"}
           </div>          
@@ -33,7 +33,7 @@ const CurrentWeather = ({currentData, hourlyData, units}) => {
           <TemperatureInformation>
             <div style={{display: "flex", justifyContent: "space-evenly", flexWrap: "wrap"}}>
               <div>
-                <img src={`http://openweathermap.org/img/wn/${currentData.weather[0].icon}@2x.png`} /><br/>
+                <img src={`https://openweathermap.org/img/wn/${currentData.weather[0].icon}@2x.png`} /><br/>
                 {currentData.weather[0].description.charAt(0).toUpperCase() + currentData.weather[0].description.slice(1)}
               </div>
               <div>

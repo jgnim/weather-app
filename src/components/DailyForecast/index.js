@@ -14,7 +14,7 @@ const DailyForecast = ({value,units}) => {
       </div>
       <MainInformation onClick={()=>{visibility ? setVisibility(false) : setVisibility(true)}}>
         <div>
-          <img src={`http://openweathermap.org/img/wn/${weatherIcon}@2x.png`}/> <br />
+          <img src={`https://openweathermap.org/img/wn/${weatherIcon}@2x.png`}/> <br />
           {value.weather[0].main}
         </div>
         <div styled={{margin: "auto"}}>

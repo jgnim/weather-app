@@ -42,7 +42,7 @@ const WeatherApp = () => {
   const SearchCity = useCallback(()=>{    
     console.log(`Use callback.`)
     if (searchText && searchText.length >=3) {
-      fetch(`http://api.openweathermap.org/geo/1.0/direct?q=${searchText.replace(" ","+")}&limit=5&appid=${config.openWeather}`)
+      fetch(`https://api.openweathermap.org/geo/1.0/direct?q=${searchText.replace(" ","+")}&limit=5&appid=${config.openWeather}`)
         .then(res=>res.json())
         .then((data)=>{setFilteredCity(data)})
         .catch(error=>console.log(error))
