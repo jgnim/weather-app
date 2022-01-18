@@ -2,25 +2,7 @@ import {useState, useEffect, useMemo, useCallback} from 'react';
 import config from '../../config/index';
 import CurrentWeather from '../CurrentWeather';
 import FutureWeather from '../FutureWeather';
-import styled, {createGlobalStyle} from 'styled-components'
-//import Cities from '../../assets/city.json'
-
-const GlobalStyle = createGlobalStyle`
-  body {
-    /* background-image: url("https://images.unsplash.com/photo-1503198515498-d0bd9ed16902?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8YmxhY2slMjBjbG91ZHxlbnwwfHwwfHw%3D&w=1000&q=80"); */
-    background-size: 100vmax;
-    background-position: center top;
-    background-color: #121212;
-    color: white;
-    width: 100vmin;
-    margin: auto;
-    box-shadow: 0 0 10px 1px white;
-    border-radius: 10px;
-    @media only screen and (max-width: 500px) {
-      width: 100%;
-    }
-  }
-`
+import styled from 'styled-components'
 
 const WeatherApp = () => {
   const [lat, setLat] = useState(43.6509);
@@ -39,8 +21,7 @@ const WeatherApp = () => {
     }) 
   },[])
 
-  const SearchCity = useCallback(()=>{    
-    console.log(`Use callback.`)
+  const searchCity = () =>{   
     if (searchText && searchText.length >=3) {
       fetch(`https://api.openweathermap.org/geo/1.0/direct?q=${searchText.replace(" ","+")}&limit=5&appid=${config.openWeather}`)
         .then(res=>res.json())
@@ -50,18 +31,31 @@ const WeatherApp = () => {
     else {
       setFilteredCity()
     }
-  },[searchText])
+  }
 
   useEffect(()=>{    
-    const dailyFetch = fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${config.openWeather}&units=${unit}`);
-    const futureFetch = fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&exclude=current,minutely,alerts&appid=${config.openWeather}&units=${unit}`);
-    Promise.all([dailyFetch,futureFetch])
-      .then(values => {
-        return Promise.all(values.map(r=>r.json()))})
-      .then(res => {
-        setCurrentForecast(res[0]);
-        setFutureForecast(res[1]);})
-      .catch((err) => console.log(err));
+    // const dailyFetch = fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${config.openWeather}&units=${unit}`);
+    // const futureFetch = fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&exclude=current,minutely,alerts&appid=${config.openWeather}&units=${unit}`);
+    // Promise.all([dailyFetch,futureFetch])
+    //   .then(values => {
+    //     return Promise.all(values.map(r=>r.json()))})
+    //   .then(res => {
+    //     setCurrentForecast(res[0]);
+    //     setFutureForecast(res[1]);})
+    //   .catch((err) => console.log(err));
+    const dailyFetch = async () => {
+      const res = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${config.openWeather}&units=${unit}`);
+      const data = await res.json();
+      setCurrentForecast(data);
+    }
+
+    const futureFetch = async () => {
+      const res = await fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&exclude=current,minutely,alerts&appid=${config.openWeather}&units=${unit}`);
+      const data = await res.json();
+      setFutureForecast(data);
+    }
+    dailyFetch();
+    futureFetch();
   },[lat,lon,unit]);
 
   const changeView = (e) => {
@@ -78,22 +72,19 @@ const WeatherApp = () => {
  }
 
  const cityChange = ({lat,lon}) =>{   
-   console.log(`City change`);
    setFilteredCity();
    setLat(lat);
    setLon(lon);
  }
 
   return (
-    <div> 
-    <GlobalStyle />
+    <div>     
       <SearchBar>
-        <input type="text" onChange={handleChange} placeholder="Enter City"/>
-        <input type="submit" value="Search" onClick={SearchCity}/>
+        <input type="text" value={searchText} onChange={handleChange} placeholder="Enter City"/>
+        <input type="submit" value="Search" onClick={searchCity}/>
         <div style={{position: "relative"}}>
           <SearchResults>
-            {filteredCity ? 
-              filteredCity.map((value,index)=>{
+            {filteredCity?.map((value,index)=>{
                 return (
                   <div key={value.lat+value.lon+index} onClick={()=>{cityChange(value)}}>
                     <City >
@@ -101,8 +92,7 @@ const WeatherApp = () => {
                     </City>
                   </div>                  
                 )
-              }) :
-              null}
+              })}
           </SearchResults>  
         </div>
       </SearchBar>

@@ -1,10 +1,11 @@
 import styled from 'styled-components'
-import DegreeConversion from '../DegreeConversion'
+import DegreeConversion from '../../utils/DegreeConversion'
 
 const CurrentWeather = ({currentData, hourlyData, units}) => {   
-  if (currentData && hourlyData) {    
+  
+  console.log(hourlyData);  
+  if (currentData && hourlyData) {  
     const currentDate = new Date();
-
     const hourlyInfo = hourlyData.hourly.map((value) => {
       let thisTime = new Date(value.dt * 1000);
       return (

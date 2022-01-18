@@ -1,6 +1,6 @@
 import {useState} from 'react'
 import styled from 'styled-components'
-import DegreeConversion from '../DegreeConversion'
+import DegreeConversion from '../../utils/DegreeConversion'
 
 const DailyForecast = ({value,units}) => {
   const [visibility, setVisibility] = useState(false);

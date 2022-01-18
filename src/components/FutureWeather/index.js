@@ -1,6 +1,4 @@
 import styled from 'styled-components'
-import {useState} from 'react'
-import DegreeConversion from '../DegreeConversion'
 import DailyForecast from '../DailyForecast'
 
 const FutureWeather = ({currentData, data, units}) => {
